@@ -1,36 +1,800 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>First Light — Let's start the morning together.</title>
 <meta name="description" content="A morning community at BUET.">
+
 <style>
-:root{--ink:#18221c;--muted:#69746d;--paper:#f7f6f0;--card:#fffef9;--line:#dfe3dc;--green:#173c2b}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}a{color:inherit;text-decoration:none}.wrap{width:min(1100px,92%);margin:auto}
-nav{display:flex;justify-content:space-between;align-items:center;padding:24px 0}.brand{font-weight:800;letter-spacing:.14em;font-size:14px}.navbtn,.btn{border:1px solid var(--ink);border-radius:999px;padding:11px 17px;font-weight:750;display:inline-block}
-.hero{padding:85px 0 100px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);font-weight:800}
-h1{font-size:clamp(50px,8vw,92px);line-height:.98;letter-spacing:-.055em;max-width:900px;margin:18px 0 28px}.hero p{font-size:20px;color:var(--muted);max-width:680px;margin-bottom:32px}
-.primary{background:var(--green);color:white;border-color:var(--green)}.buttons{display:flex;gap:12px;flex-wrap:wrap}
-section{padding:88px 0;border-top:1px solid var(--line)}.head{display:flex;justify-content:space-between;gap:40px;align-items:end;margin-bottom:40px}h2{font-size:clamp(36px,5vw,58px);line-height:1.05;letter-spacing:-.04em;margin:0;max-width:700px}.head p{max-width:410px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;min-height:180px}.card b{display:block;margin-bottom:9px;font-size:18px}.card span{color:var(--muted)}
-.callout{background:var(--green);color:white;border-radius:30px;padding:55px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}.callout .eyebrow{color:#b8cbbd}.callout p{color:#d6e1d9;font-size:18px}.white{background:white;border-color:white}
-.quote{text-align:center}.quote p{font-size:clamp(32px,5vw,60px);line-height:1.08;letter-spacing:-.04em;font-weight:750;max-width:950px;margin:auto}.quote small{display:block;color:var(--muted);margin-top:22px}
-footer{padding:38px 0;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px}
-@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.callout{grid-template-columns:1fr;padding:34px}.head{display:block}}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:50px}footer{display:block}}
-</style></head>
+:root{
+  --ink:#18221c;
+  --muted:#69746d;
+  --paper:#f7f6f0;
+  --card:#fffef9;
+  --line:#dfe3dc;
+  --green:#173c2b
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.6
+}
+
+a{
+  color:inherit;
+  text-decoration:none
+}
+
+button{
+  font:inherit
+}
+
+.wrap{
+  width:min(1100px,92%);
+  margin:auto
+}
+
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:24px 0
+}
+
+.brand{
+  font-weight:800;
+  letter-spacing:.14em;
+  font-size:14px
+}
+
+.navbtn,.btn{
+  border:1px solid var(--ink);
+  border-radius:999px;
+  padding:11px 17px;
+  font-weight:750;
+  display:inline-block;
+  cursor:pointer;
+  background:transparent
+}
+
+.hero{
+  padding:85px 0 100px
+}
+
+.eyebrow{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--muted);
+  font-weight:800
+}
+
+h1{
+  font-size:clamp(50px,8vw,92px);
+  line-height:.98;
+  letter-spacing:-.055em;
+  max-width:900px;
+  margin:18px 0 28px
+}
+
+.hero p{
+  font-size:20px;
+  color:var(--muted);
+  max-width:680px;
+  margin-bottom:32px
+}
+
+.primary{
+  background:var(--green);
+  color:white;
+  border-color:var(--green)
+}
+
+.buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap
+}
+
+section{
+  padding:88px 0;
+  border-top:1px solid var(--line)
+}
+
+.head{
+  display:flex;
+  justify-content:space-between;
+  gap:40px;
+  align-items:end;
+  margin-bottom:40px
+}
+
+h2{
+  font-size:clamp(36px,5vw,58px);
+  line-height:1.05;
+  letter-spacing:-.04em;
+  margin:0;
+  max-width:700px
+}
+
+.head p{
+  max-width:410px;
+  color:var(--muted)
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:28px;
+  min-height:180px
+}
+
+.card b{
+  display:block;
+  margin-bottom:9px;
+  font-size:18px
+}
+
+.card span{
+  color:var(--muted)
+}
+
+.callout{
+  background:var(--green);
+  color:white;
+  border-radius:30px;
+  padding:55px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:40px;
+  align-items:center
+}
+
+.callout .eyebrow{
+  color:#b8cbbd
+}
+
+.callout p{
+  color:#d6e1d9;
+  font-size:18px
+}
+
+.white{
+  background:white;
+  border-color:white
+}
+
+.quote{
+  text-align:center
+}
+
+.quote p{
+  font-size:clamp(32px,5vw,60px);
+  line-height:1.08;
+  letter-spacing:-.04em;
+  font-weight:750;
+  max-width:950px;
+  margin:auto
+}
+
+.quote small{
+  display:block;
+  color:var(--muted);
+  margin-top:22px
+}
+
+.login-box{
+  display:none;
+  margin-top:35px;
+  padding:30px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:22px;
+  max-width:500px
+}
+
+.login-box h3{
+  margin:0 0 8px;
+  font-size:24px
+}
+
+.login-box p{
+  font-size:15px;
+  margin:0 0 20px
+}
+
+.user-box{
+  display:none;
+  margin-top:25px;
+  padding:22px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:22px;
+  max-width:500px
+}
+
+.user-box p{
+  margin:0 0 15px;
+  font-size:16px
+}
+
+.status{
+  margin-top:15px;
+  color:var(--muted);
+  font-size:14px
+}
+
+footer{
+  padding:38px 0;
+  color:var(--muted);
+  font-size:13px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px
+}
+
+@media(max-width:800px){
+
+.grid{
+  grid-template-columns:1fr 1fr
+}
+
+.callout{
+  grid-template-columns:1fr;
+  padding:34px
+}
+
+.head{
+  display:block
+}
+
+}
+
+@media(max-width:520px){
+
+.grid{
+  grid-template-columns:1fr
+}
+
+.hero{
+  padding-top:50px
+}
+
+footer{
+  display:block
+}
+
+}
+</style>
+</head>
+
+
 <body>
-<header class="wrap"><nav><div class="brand">FIRST LIGHT</div><a class="navbtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfx-Eh7jYkCDL-I5vH1eqR4ZIDg1nyQnvJG7HvBnklX6NSS8g/viewform" target="_blank">JOIN</a></nav></header>
+
+<header class="wrap">
+
+<nav>
+
+<div class="brand">
+FIRST LIGHT
+</div>
+
+<button class="navbtn" id="joinTop">
+JOIN
+</button>
+
+</nav>
+
+</header>
+
+
 <main>
-<section class="wrap hero"><div class="eyebrow">A morning community at BUET</div>
-<h1>The best part of your day starts before it.</h1>
-<p>Let's start the morning together. Come to the Central Playground, run together, exercise together, meet people, and start the day with purpose.</p>
-<div class="buttons"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfx-Eh7jYkCDL-I5vH1eqR4ZIDg1nyQnvJG7HvBnklX6NSS8g/viewform" target="_blank">TRY ONE MORNING →</a><a class="btn" href="#why">Why First Light?</a></div></section>
-<section id="why"><div class="wrap"><div class="head"><h2>Small mornings can create a bigger change.</h2><p>You don't need a perfect routine. You just need a reason to get out of bed and people who will show up with you.</p></div>
-<div class="grid"><div class="card"><b>Wake up early</b><span>Give your morning a purpose before the day gets busy.</span></div><div class="card"><b>Move your body</b><span>Keep physical activity simple, social, and consistent.</span></div><div class="card"><b>Meet people</b><span>Start the day around people who are trying too.</span></div><div class="card"><b>Build consistency</b><span>One morning becomes another. That's how habits grow.</span></div></div></div></section>
-<section><div class="wrap"><div class="callout"><div><div class="eyebrow">JUST COME</div><h2>Central Playground, BUET.</h2></div><div><p>Run together. Exercise together. Start the day together.</p><a class="btn white" href="https://docs.google.com/forms/d/e/1FAIpQLSfx-Eh7jYkCDL-I5vH1eqR4ZIDg1nyQnvJG7HvBnklX6NSS8g/viewform" target="_blank">JOIN FIRST LIGHT →</a></div></div></div></section>
-<section class="quote"><div class="wrap"><p>“You woke up early, exercised, met some people, and now it's only 7 AM.”</p><small>Just try it for one morning.</small></div></section>
-<section><div class="wrap" style="text-align:center"><div class="eyebrow">Your first step</div><h2 style="margin:18px auto 24px">Let's start the morning together.</h2><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSfx-Eh7jYkCDL-I5vH1eqR4ZIDg1nyQnvJG7HvBnklX6NSS8g/viewform" target="_blank">TRY ONE MORNING →</a></div></section>
+
+
+<section class="wrap hero">
+
+<div class="eyebrow">
+A morning community at BUET
+</div>
+
+<h1>
+The best part of your day starts before it.
+</h1>
+
+<p>
+Let's start the morning together. Come to the Central Playground,
+run together, exercise together, meet people, and start the day with purpose.
+</p>
+
+
+<div class="buttons">
+
+<button class="btn primary" id="joinHero">
+TRY ONE MORNING →
+</button>
+
+<a class="btn" href="#why">
+Why First Light?
+</a>
+
+</div>
+
+
+<!-- LOGIN BOX -->
+
+<div class="login-box" id="loginBox">
+
+<h3>
+Join First Light
+</h3>
+
+<p>
+Sign in with your Google account to join the community.
+</p>
+
+<button class="btn primary" id="googleLogin">
+CONTINUE WITH GOOGLE →
+</button>
+
+<div class="status" id="loginStatus"></div>
+
+</div>
+
+
+<!-- USER BOX -->
+
+<div class="user-box" id="userBox">
+
+<p id="userText"></p>
+
+<button class="btn" id="logoutBtn">
+LOG OUT
+</button>
+
+<div class="status" id="joinStatus"></div>
+
+</div>
+
+</section>
+
+
+
+<section id="why">
+
+<div class="wrap">
+
+<div class="head">
+
+<h2>
+Small mornings can create a bigger change.
+</h2>
+
+<p>
+You don't need a perfect routine. You just need a reason
+to get out of bed and people who will show up with you.
+</p>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+
+<b>
+Wake up early
+</b>
+
+<span>
+Give your morning a purpose before the day gets busy.
+</span>
+
+</div>
+
+
+<div class="card">
+
+<b>
+Move your body
+</b>
+
+<span>
+Keep physical activity simple, social, and consistent.
+</span>
+
+</div>
+
+
+<div class="card">
+
+<b>
+Meet people
+</b>
+
+<span>
+Start the day around people who are trying too.
+</span>
+
+</div>
+
+
+<div class="card">
+
+<b>
+Build consistency
+</b>
+
+<span>
+One morning becomes another. That's how habits grow.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section>
+
+<div class="wrap">
+
+<div class="callout">
+
+<div>
+
+<div class="eyebrow">
+JUST COME
+</div>
+
+<h2>
+Central Playground, BUET.
+</h2>
+
+</div>
+
+
+<div>
+
+<p>
+Run together. Exercise together. Start the day together.
+</p>
+
+<button class="btn white" id="joinCallout">
+JOIN FIRST LIGHT →
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="quote">
+
+<div class="wrap">
+
+<p>
+“You woke up early, exercised, met some people,
+and now it's only 7 AM.”
+</p>
+
+<small>
+Just try it for one morning.
+</small>
+
+</div>
+
+</section>
+
+
+
+<section>
+
+<div class="wrap" style="text-align:center">
+
+<div class="eyebrow">
+Your first step
+</div>
+
+<h2 style="margin:18px auto 24px">
+Let's start the morning together.
+</h2>
+
+<button class="btn primary" id="joinBottom">
+TRY ONE MORNING →
+</button>
+
+</div>
+
+</section>
+
+
 </main>
-<footer class="wrap"><span>FIRST LIGHT — A morning community at BUET</span><span>Start early. Move. Connect. Begin.</span></footer>
-</body></html>
+
+
+
+<footer class="wrap">
+
+<span>
+FIRST LIGHT — A morning community at BUET
+</span>
+
+<span>
+Start early. Move. Connect. Begin.
+</span>
+
+</footer>
+
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================
+   SUPABASE CONFIGURATION
+========================================= */
+
+const SUPABASE_URL =
+"https://yunubkleobbsebyfbepj.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_Fm1Gc3mIFN3k6rVw6ijCNg_E9_V2qYb";
+
+const { createClient } = window.supabase;
+
+const client = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* =========================================
+   ELEMENTS
+========================================= */
+
+const loginBox =
+document.getElementById("loginBox");
+
+const userBox =
+document.getElementById("userBox");
+
+const loginStatus =
+document.getElementById("loginStatus");
+
+const joinStatus =
+document.getElementById("joinStatus");
+
+const userText =
+document.getElementById("userText");
+
+
+/* =========================================
+   OPEN LOGIN
+========================================= */
+
+function openLogin(){
+
+  loginBox.style.display = "block";
+
+  userBox.style.display = "none";
+
+  loginBox.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+
+/* =========================================
+   JOIN BUTTONS
+========================================= */
+
+document.getElementById("joinTop")
+.addEventListener("click", openLogin);
+
+document.getElementById("joinHero")
+.addEventListener("click", openLogin);
+
+document.getElementById("joinCallout")
+.addEventListener("click", openLogin);
+
+document.getElementById("joinBottom")
+.addEventListener("click", openLogin);
+
+
+/* =========================================
+   GOOGLE LOGIN
+========================================= */
+
+document.getElementById("googleLogin")
+.addEventListener("click", async function(){
+
+  loginStatus.textContent =
+  "Opening Google...";
+
+  const { data, error } =
+  await client.auth.signInWithOAuth({
+
+    provider:"google",
+
+    options:{
+      redirectTo:
+      "https://firstlighttogether-arch.github.io/first-light/"
+    }
+
+  });
+
+  if(error){
+
+    loginStatus.textContent =
+    "Login failed: " + error.message;
+
+  }
+
+});
+
+
+/* =========================================
+   SHOW USER
+========================================= */
+
+async function showUser(user){
+
+  loginBox.style.display = "none";
+
+  userBox.style.display = "block";
+
+
+  const name =
+  user.user_metadata?.full_name ||
+  user.user_metadata?.name ||
+  user.email ||
+  "First Light Member";
+
+
+  userText.textContent =
+  "Welcome to First Light, " + name + "!";
+
+
+  /*
+   The database trigger should already create
+   the profile automatically.
+  */
+
+  const { error } =
+  await client
+  .from("profiles")
+  .upsert({
+
+    id:user.id,
+
+    full_name:name
+
+  },{
+    onConflict:"id"
+  });
+
+
+  if(error){
+
+    console.log(
+      "Profile update error:",
+      error.message
+    );
+
+    joinStatus.textContent =
+    "Signed in successfully.";
+
+  }else{
+
+    joinStatus.textContent =
+    "You are now a First Light member.";
+
+  }
+
+}
+
+
+/* =========================================
+   CHECK CURRENT SESSION
+========================================= */
+
+async function checkUser(){
+
+  const {
+    data:{
+      session
+    }
+  } = await client.auth.getSession();
+
+
+  if(session){
+
+    showUser(session.user);
+
+  }
+
+}
+
+
+/* =========================================
+   LOG OUT
+========================================= */
+
+document.getElementById("logoutBtn")
+.addEventListener("click", async function(){
+
+  await client.auth.signOut();
+
+  userBox.style.display = "none";
+
+  loginBox.style.display = "none";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+});
+
+
+/* =========================================
+   AUTH STATE CHANGE
+========================================= */
+
+client.auth.onAuthStateChange(
+  async (event, session) => {
+
+    if(session){
+
+      showUser(session.user);
+
+    }else{
+
+      userBox.style.display = "none";
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+checkUser();
+
+</script>
+
+</body>
+</html>
