@@ -177,6 +177,7 @@ h2{
 
 .white{
   background:white;
+  color:var(--green);
   border-color:white
 }
 
@@ -568,12 +569,17 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_Fm1Gc3mIFN3k6rVw6ijCNg_E9_V2qYb";
 
+const DASHBOARD_URL =
+"https://firstlighttogether-arch.github.io/first-light/dashboard.html";
+
 const { createClient } = window.supabase;
 
 const client = createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+
+let isRedirecting = false;
 
 
 /* =========================================
@@ -647,8 +653,7 @@ document.getElementById("googleLogin")
     provider:"google",
 
     options:{
-      redirectTo:
-      "https://firstlighttogether-arch.github.io/first-light/"
+      redirectTo: DASHBOARD_URL
     }
 
   });
@@ -664,26 +669,19 @@ document.getElementById("googleLogin")
 
 
 /* =========================================
-   SHOW USER
+   REDIRECT AUTHENTICATED USER
 ========================================= */
 
 async function showUser(user){
 
-  loginBox.style.display = "none";
-
-  userBox.style.display = "block";
-
+  if(isRedirecting) return;
+  isRedirecting = true;
 
   const name =
   user.user_metadata?.full_name ||
   user.user_metadata?.name ||
   user.email ||
   "First Light Member";
-
-
-  userText.textContent =
-  "Welcome to First Light, " + name + "!";
-
 
   /*
    The database trigger should already create
@@ -703,7 +701,6 @@ async function showUser(user){
     onConflict:"id"
   });
 
-
   if(error){
 
     console.log(
@@ -711,15 +708,9 @@ async function showUser(user){
       error.message
     );
 
-    joinStatus.textContent =
-    "Signed in successfully.";
-
-  }else{
-
-    joinStatus.textContent =
-    "You are now a First Light member.";
-
   }
+
+  window.location.replace(DASHBOARD_URL);
 
 }
 
@@ -772,11 +763,13 @@ document.getElementById("logoutBtn")
 ========================================= */
 
 client.auth.onAuthStateChange(
-  async (event, session) => {
+  (event, session) => {
 
     if(session){
 
-      showUser(session.user);
+      setTimeout(() => {
+        showUser(session.user);
+      }, 0);
 
     }else{
 
