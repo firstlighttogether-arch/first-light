@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>First Light — Member Dashboard</title>
+<style>
+:root{--green:#173c2b;--paper:#f7f6f0;--line:#dfe3dc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:#18221c;font-family:system-ui;line-height:1.6}
+main{max-width:950px;margin:45px auto;padding:20px}
+header{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:42px;line-height:1.1}
+h2{font-size:22px}
+.card{background:white;border:1px solid var(--line);border-radius:20px;padding:25px;margin:18px 0}
+button{padding:12px 18px;border-radius:30px;border:1px solid var(--green);cursor:pointer;font-weight:bold}
+.primary{background:var(--green);color:white}
+.muted{color:#69746d}
+.item{padding:12px 0;border-top:1px solid var(--line)}
+.status{color:#69746d;font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<header>
+<strong>FIRST LIGHT</strong>
+<button id="logout">LOG OUT</button>
+</header>
+
+<section>
+<p class="muted">MEMBER SPACE</p>
+<h1 id="welcome">Welcome to First Light.</h1>
+<p class="muted">Small mornings. Shared effort. Steady progress.</p>
+</section>
+
+<section class="card">
+<p class="muted">NEXT MORNING</p>
+<h2>Tomorrow's Crew</h2>
+<h2 id="date">Loading...</h2>
+<p id="activity">Morning meetup</p>
+<p id="place">Central Playground, BUET</p>
+<button class="primary" id="join">I'M COMING TOMORROW</button>
+<button id="cancel" hidden>CANCEL</button>
+<p class="status" id="joinStatus"></p>
+<div id="crew"></div>
+</section>
+
+<section class="card">
+<p class="muted">YOUR CONSISTENCY</p>
+<h2>Today's Attendance</h2>
+<p id="today"></p>
+<button class="primary" id="attend">I WAS THERE TODAY</button>
+<p class="status" id="attStatus"></p>
+<h2>Recent Attendance</h2>
+<div id="history"></div>
+</section>
+
+<section class="card">
+<p class="muted">THE WEEK</p>
+<h2>Weekly Activity</h2>
+<div id="weekly">Loading routine...</div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const db = window.supabase.createClient(
+"https://yunubkleobbsebyfbepj.supabase.co",
+"sb_publishable_Fm1Gc3mIFN3k6rVw6ijCNg_E9_V2qYb"
+);
+
+const $ = id => document.getElementById(id);
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+function iso(d){
+return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function nice(s){
+return new Date(s+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+}
+
+let user, today, tomorrow;
+
+async function start(){
+const {data:{session}} = await db.auth.getSession();
+if(!session){location.replace("index.html");return;}
+
+user=session.user;
+const name=user.user_metadata?.full_name || user.user_metadata?.name || user.email;
+$("welcome").textContent="Welcome, "+name+"!";
+
+const now=new Date();
+today=iso(now);
+const next=new Date(now);
+next.setDate(next.getDate()+1);
+tomorrow=iso(next);
+
+$("date").textContent=nice(tomorrow);
+$("today").textContent=nice(today);
+
+await Promise.all([loadCrew(),loadAttendance(),loadWeekly()]);
+}
+
+async function loadCrew(){
+const day=new Date(tomorrow+"T12:00:00").getDay();
+
+const {data:override,error:e1}=await db.from("daily_overrides")
+.select("activity,location,time").eq("event_date",tomorrow).maybeSingle();
+
+if(e1) console.error(e1);
+
+let schedule=override;
+if(!schedule){
+const {data,error}=await db.from("weekly_routines")
+.select("activity,location,time").eq("day_of_week",day).maybeSingle();
+if(error) console.error(error);
+schedule=data;
+}
+
+$("activity").textContent=schedule?.activity || "Morning meetup";
+$("place").textContent=(schedule?.time || "Morning")+" · "+(schedule?.location || "Central Playground, BUET");
+
+const {data:rows,error}=await db.from("tomorrow_confirmations")
+.select("user_id,profiles(full_name)")
+.eq("event_date",tomorrow);
+
+if(error){$("crew").textContent=error.message;return;}
+
+const joined=rows.some(r=>r.user_id===user.id);
+$("join").hidden=joined;
+$("cancel").hidden=!joined;
+$("crew").replaceChildren();
+
+if(!rows.length){
+$("crew").textContent="No confirmations yet. Be the first!";
+}else{
+rows.forEach((r,i)=>{
+const p=document.createElement("p");
+p.className="item";
+p.textContent=(i+1)+". "+(r.profiles?.full_name || "First Light Member")+(r.user_id===user.id?" (You)":"");
+$("crew").appendChild(p);
+});
+}
+$("joinStatus").textContent=joined?"You're on tomorrow's crew!":"";
+}
+
+async function loadAttendance(){
+const {data,error}=await db.from("attendance")
+.select("attendance_date,activity")
+.eq("user_id",user.id)
+.order("attendance_date",{ascending:false}).limit(30);
+
+if(error){$("attStatus").textContent=error.message;return;}
+
+const rows=data||[];
+const done=rows.some(r=>r.attendance_date===today);
+$("attend").disabled=done;
+$("attend").textContent=done?"ATTENDANCE MARKED ✓":"I WAS THERE TODAY";
+$("attStatus").textContent=done?"Today's attendance is recorded.":"Mark your attendance after joining a morning.";
+
+$("history").replaceChildren();
+if(!rows.length)$("history").textContent="Your first morning is waiting.";
+
+rows.slice(0,10).forEach(r=>{
+const p=document.createElement("p");
+p.className="item";
+p.textContent=nice(r.attendance_date)+" — "+(r.activity||"Attended");
+$("history").appendChild(p);
+});
+}
+
+async function loadWeekly(){
+const {data,error}=await db.from("weekly_routines")
+.select("day_of_week,activity").order("day_of_week");
+
+if(error){$("weekly").textContent=error.message;return;}
+$("weekly").replaceChildren();
+
+(data||[]).forEach(r=>{
+const p=document.createElement("p");
+p.className="item";
+p.textContent=days[r.day_of_week]+": "+r.activity;
+$("weekly").appendChild(p);
+});
+}
+
+$("join").onclick=async()=>{
+$("join").disabled=true;
+const {error}=await db.from("tomorrow_confirmations")
+.insert({user_id:user.id,event_date:tomorrow});
+$("join").disabled=false;
+if(error){$("joinStatus").textContent=error.message;return;}
+await loadCrew();
+};
+
+$("cancel").onclick=async()=>{
+const {error}=await db.from("tomorrow_confirmations")
+.delete().eq("user_id",user.id).eq("event_date",tomorrow);
+if(error){$("joinStatus").textContent=error.message;return;}
+await loadCrew();
+};
+
+$("attend").onclick=async()=>{
+$("attend").disabled=true;
+const {error}=await db.from("attendance")
+.insert({user_id:user.id,attendance_date:today,activity:"Morning meetup"});
+if(error){
+$("attStatus").textContent=error.message;
+$("attend").disabled=false;
+return;
+}
+await loadAttendance();
+};
+
+$("logout").onclick=async()=>{
+await db.auth.signOut();
+location.replace("index.html");
+};
+
+start().catch(e=>{
+console.error(e);
+$("welcome").textContent="Dashboard could not load.";
+});
+</script>
+</body>
+</html>
